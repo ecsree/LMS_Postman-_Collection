@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "90fef60a-d627-43c2-98db-6730a18b224d",
+		"name": "Batch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25222309"
+	},
+	"item": [
+		{
+			"name": "All Programs Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"// tests[\"validating response body\"] = responseBody.has(\"1604\");\r",
+							"// var response = JSON.parse(responseBody);\r",
+							"// tests[\"programId\"] = response.programId=1604\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/allPrograms",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"allPrograms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostProgram Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = JSON.parse(responseBody);\r",
+							"tests[\"ProgramName\"]= response.programeName = \"API Testing\";\r",
+							"tests[\"validating status code\"] = responseCode.code=201\r",
+							"\r",
+							"bodyData = JSON.parse(responseBody);\r",
+							"value = bodyData.programId\r",
+							"console.log(value);\r",
+							"pm.environment.set(\"programId\", value);\r",
+							"console.log(pm.globals.get(\"creationtime\"));\r",
+							"console.log(pm.globals.get(\"modificationtime\"));\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');\r",
+							"\r",
+							"pm.globals.set(\"creationtime\", moment().format());\r",
+							"var modTime = require ('moment');\r",
+							"pm.globals.set(\"modificationtime\", modTime().format());\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"programName\": \"{{ProgramName}}\",\r\n        \"programDescription\": \"{{ProgramDescription}}\",\r\n        \"programStatus\": \"{{ProgramStatus}}\",\r\n        \"creationTime\": \"{{creationtime}}\",\r\n        \"lastModTime\": \"{{modificationtime}}\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/saveprogram",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"saveprogram"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "programById Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"// var response = JSON.parse(responseBody);\r",
+							"// tests[\"programId\"] = response.programId=1604;\r",
+							"// tests[\"validating ProgramName \"] = responseBody.has(\"Jan23-API-SDET-018\");\r",
+							"// tests[\"programStatus\"] = responseBody.has (\"Active\");\r",
+							"// tests[\"verify Programname\"] = response.programName=\"API \"\r",
+							"// tests[\"Verify ProgramStatus\"] = response.programStatus = \"Active\""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/programs/{{programId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"programs",
+						"{{programId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ByProgramId Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require ('moment');\r",
+							"pm.globals.set(\"creationtime\", moment().format());\r",
+							"var modTime = require ('moment');\r",
+							"pm.globals.set(\"modificationtime\", modTime().format());\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"console.log(pm.globals.get(\"creationtime\"));\r",
+							"console.log(pm.globals.get(\"modificationtime\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n\"programName\": \"{{Uprogram}}\",\r\n\"programDescription\": \"{{Udesc}}\",\r\n\"programStatus\": \"{{ProgramStatus}}\",\r\n\"creationTime\": \"{{creationtime}}\",\r\n\"lastModTime\": \"{{modificationtime}}\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/putprogram/{{programId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"putprogram",
+						"{{programId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Batch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"// jsonData = JSON.parse(responseBody);\r",
+							"// value = jsonData.batchId;\r",
+							"// pm.globals.set(\"batchId\", value);\r",
+							"\r",
+							"// tests[\"validating response body\"] = responseBody.has(\"Jan23-API_LEARNERS-SDET-SDET01\");\r",
+							"// console.log(responseBody);\r",
+							"bodyData = JSON.parse(responseBody);\r",
+							"value = bodyData.batchId\r",
+							"console.log(value);\r",
+							"pm.environment.set(\"batchId\", value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"batchName\": \"{{batchName}}\",\r\n\"batchDescription\": \"{{batchDesc}}\",\r\n\"batchStatus\": \"{{batchStatus}}\",\r\n\"batchNoOfClasses\": {{classes}},\r\n\"programId\":{{programId}}\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/batches",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"batches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Batches",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/batches",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"batches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//tests[\"validating response body\"] = responseBody.has(\"API Postman Learning\");\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"//console.log(responseBody);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"batchName\": \"{{Ubatch}}\",\r\n        \"batchDescription\": \"{{UBDesc}}\",\r\n        \"batchStatus\": \"{{batchStatus}}\",\r\n        \"batchNoOfClasses\": {{classes}},\r\n        \"programId\": {{programId}},\r\n        \"programName\": \"{{Uprogram}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/batches/{{batchId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"batches",
+						"{{batchId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"//var response = JSON.parse(responseBody);\r",
+							"tests[\"check status message\"] = responseBody.has=\"successfully\";\r",
+							"// pm.test(\"check contect-Type header\", function()\r",
+							"// {\r",
+							"//     pm.response.to.be.header(\"Content-Type\", \"application/json;charset=utf-8\")\r",
+							"// });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/batches/{{batchId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"batches",
+						"{{batchId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ProgramById Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/deletebyprogid/{{programId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"deletebyprogid",
+						"{{programId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://lms-backend-service.herokuapp.com/lms/",
+			"type": "string"
+		},
+		{
+			"key": "batchId",
+			"value": "xyz",
+			"type": "string"
+		}
+	]
+}
